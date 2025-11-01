@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/microservice-library.iml" filepath="$PROJECT_DIR$/.idea/microservice-library.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/turkcell-45-LibraySystem-project.iml" filepath="$PROJECT_DIR$/.idea/turkcell-45-LibraySystem-project.iml" />
     </modules>
   </component>
 </project>
