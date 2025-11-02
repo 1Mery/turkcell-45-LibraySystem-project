@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: config-server
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/1Mery/turkcell-45-LibraySystem-project.git
+          default-label: main
+          search-paths:
+            - configurations
+            - configurations/{application}
+          clone-on-start: true
+          force-pull: true
+server:
+  port: 8989
