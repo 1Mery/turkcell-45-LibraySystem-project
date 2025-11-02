@@ -1,4 +1,15 @@
 package com.turkcell.bookservice.domain.model;
 
-public class BookId {
+import java.io.Serializable;
+import java.util.Objects;
+import java.util.UUID;
+
+public record BookId(UUID value) implements Serializable {
+    public BookId{
+        Objects.requireNonNull(value,"BookId can not be null..");
+    }
+
+    public static BookId generate(){
+        return new BookId(UUID.randomUUID());
+    }
 }
