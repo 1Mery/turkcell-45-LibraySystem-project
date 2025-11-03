@@ -9,7 +9,8 @@ import java.util.Optional;
 public interface CategoryRepository {
     Category save(Category category);
     Optional<Category> findById(CategoryId id);
-    Optional<Category> findByName(String name);
     List<Category> findAll();
     void delete(CategoryId id);
+    boolean existsByName(String name);
+    Optional<Category> findByName(String name);
 }
