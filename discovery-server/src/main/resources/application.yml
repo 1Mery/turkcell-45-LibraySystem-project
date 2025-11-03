@@ -3,3 +3,5 @@ spring:
     name: discovery-server
   profiles:
     active: dev
+  config:
+    import: configserver:http://localhost:8989

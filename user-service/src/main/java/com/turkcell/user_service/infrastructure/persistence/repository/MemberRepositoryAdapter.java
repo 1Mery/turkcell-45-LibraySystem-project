@@ -2,7 +2,7 @@ package com.turkcell.user_service.infrastructure.persistence.repository;
 
 import com.turkcell.user_service.domain.model.Member;
 import com.turkcell.user_service.domain.model.MemberId;
-import com.turkcell.user_service.domain.repository.MemberRepository;
+import com.turkcell.user_service.domain.port.MemberRepository;
 import com.turkcell.user_service.infrastructure.persistence.entity.JpaMemberEntity;
 import com.turkcell.user_service.infrastructure.persistence.mapper.MemberEntityMapper;
 import org.springframework.data.domain.PageRequest;
