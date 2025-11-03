@@ -34,6 +34,23 @@ public class JpaMemberEntity {
     @Column(nullable = false, length = 20)
     private MemberStatus memberStatus;
 
+    public JpaMemberEntity(UUID id, String firstName, String lastName, String email, String password, String username,
+            String phone, MembershipLevel membershipLevel, MemberStatus memberStatus) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.password = password;
+        this.username = username;
+        this.phone = phone;
+        this.membershipLevel = membershipLevel;
+        this.memberStatus = memberStatus;
+    }
+
+    public JpaMemberEntity() {
+
+    }
+
     public UUID id() {
         return id;
     }

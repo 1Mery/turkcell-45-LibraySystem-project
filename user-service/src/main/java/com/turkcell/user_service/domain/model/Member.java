@@ -26,6 +26,8 @@ public class Member {
         this.username = username;
         this.password = password;
         this.phone = phone;
+        this.level = level != null ? level : MembershipLevel.getDefault();
+        this.status = status != null ? status : MemberStatus.getDefault();
     }
 
     //create method
@@ -70,7 +72,11 @@ public class Member {
 
     public void updateEmail(Email newEmail){
         Objects.requireNonNull(newEmail, "Email cannot be null");
+        if(this.email.equals(newEmail)){
+            throw new IllegalArgumentException("This email already exists");
+        }
         this.email = newEmail;
+
     }
 
     public void changeUsername(Username newUsername){

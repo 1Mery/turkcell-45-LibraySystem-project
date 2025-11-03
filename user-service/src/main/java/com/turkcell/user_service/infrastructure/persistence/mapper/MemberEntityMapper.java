@@ -9,17 +9,17 @@ public class MemberEntityMapper {
 
     //Member -> JpaMemberEntity
     public JpaMemberEntity toEntity(Member member){
-        JpaMemberEntity entity = new JpaMemberEntity();
-        entity.setId(member.id().value());
-        entity.setFirstName(entity.firstName());
-        entity.setLastName(entity.lastName());
-        entity.setEmail(entity.email());
-        entity.setPassword(entity.password());
-        entity.setUsername(entity.username());
-        entity.setPhone(entity.phone());
-        entity.setMembershipLevel(entity.membershipLevel());
-        entity.setMemberStatus(entity.memberStatus());
-        return entity;
+        return new JpaMemberEntity(
+                member.id().value(),
+                member.firstName(),
+                member.lastName(),
+                member.email().value(),
+                member.password(),
+                member.username().value(),
+                member.phone().value(),
+                member.level(),
+                member.status()
+        );
     }
 
 

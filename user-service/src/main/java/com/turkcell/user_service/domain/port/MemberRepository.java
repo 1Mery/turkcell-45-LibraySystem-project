@@ -1,6 +1,5 @@
-package com.turkcell.user_service.domain.repository;
+package com.turkcell.user_service.domain.port;
 
-import com.turkcell.user_service.domain.model.Email;
 import com.turkcell.user_service.domain.model.Member;
 import com.turkcell.user_service.domain.model.MemberId;
 

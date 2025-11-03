@@ -10,7 +10,7 @@ public record Email(String value) {
         if (value.isBlank()){
             throw new IllegalArgumentException("Email cannot be blank");
         }
-        if (!value.matches("^(?=.{1,64}@)[\\p{L}0-9_\\+.-]+(\\.[\\p{L}0-9_\\+.-]+)*@[^-][\\p{L}0-9-]+(\\.[\\p{L}0-9-]+)*(\\.[\\p{L}]{2,})$")){
+        if (!value.matches("^[A-Za-z0-9._%+-]+@(?:[A-Za-z0-9-]+\\.)*edu\\.tr$")){
             throw new IllegalArgumentException("Invalid email address");
         }
     }

@@ -13,7 +13,7 @@ public record Username(String value) {
         if(value.length() < 3  || value.length() > 12 ){
             throw new IllegalArgumentException("Username must be between 3 and 12 characters");
         }
-        if (!value.matches("/^[a-zA-Z0-9._]+$/")){
+        if (!value.matches("^[a-zA-Z0-9._]+$")) {
             throw new IllegalArgumentException("Username contains invalid characters");
         }
     }
