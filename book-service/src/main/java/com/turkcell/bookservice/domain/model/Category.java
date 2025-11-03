@@ -14,6 +14,11 @@ public class Category {
         return new Category(CategoryId.generate(), name);
     }
 
+    public static Category rehydrate(CategoryId id, String name) {
+        return new Category(id, name);
+    }
+
+
     private static void validateName(String name) {
         if (name == null || name.isBlank())
             throw new IllegalArgumentException("Category name cannot be empty");
