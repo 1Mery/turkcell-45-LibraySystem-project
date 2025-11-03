@@ -12,7 +12,9 @@
         <module name="loan-service" />
         <module name="reservation-service" />
         <module name="gateway-server" />
+        <module name="user-service" />
         <module name="fine-service" />
+        <module name="notification-service" />
       </profile>
     </annotationProcessing>
   </component>
