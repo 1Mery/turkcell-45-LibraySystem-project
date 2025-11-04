@@ -11,5 +11,7 @@ public class ConsoleDomainEventPublisher implements DomainEventPublisher {
     public void publish(EmailChangedEvent event) {
         System.out.println("Email changed: member id= " + event.id() +
                 ", new email= " + event.newEmail());
+        System.out.println("Notification Service kullanıcıya " +
+                "mail adresi değişikliğine dair bildirim gönderir...");
     }
 }
