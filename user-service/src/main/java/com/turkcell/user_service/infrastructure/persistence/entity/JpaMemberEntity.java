@@ -1,7 +1,5 @@
 package com.turkcell.user_service.infrastructure.persistence.entity;
 
-import com.turkcell.user_service.domain.model.MemberStatus;
-import com.turkcell.user_service.domain.model.MembershipLevel;
 import jakarta.persistence.*;
 
 import java.util.UUID;
@@ -27,15 +25,15 @@ public class JpaMemberEntity {
     @Column(name = "phone", nullable = false, unique = true)
     private String phone;
 
+    @Column(name = "membership_level")
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
-    private MembershipLevel membershipLevel;
+    private String membershipLevel;
+    @Column(name = "member_status")
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 20)
-    private MemberStatus memberStatus;
+    private String memberStatus;
 
     public JpaMemberEntity(UUID id, String firstName, String lastName, String email, String password, String username,
-            String phone, MembershipLevel membershipLevel, MemberStatus memberStatus) {
+            String phone, String membershipLevel, String memberStatus) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -107,19 +105,19 @@ public class JpaMemberEntity {
         this.phone = phone;
     }
 
-    public MembershipLevel membershipLevel() {
+    public String membershipLevel() {
         return membershipLevel;
     }
 
-    public void setMembershipLevel(MembershipLevel membershipLevel) {
+    public void setMembershipLevel(String membershipLevel) {
         this.membershipLevel = membershipLevel;
     }
 
-    public MemberStatus memberStatus() {
+    public String memberStatus() {
         return memberStatus;
     }
 
-    public void setMemberStatus(MemberStatus memberStatus) {
+    public void setMemberStatus(String memberStatus) {
         this.memberStatus = memberStatus;
     }
 }

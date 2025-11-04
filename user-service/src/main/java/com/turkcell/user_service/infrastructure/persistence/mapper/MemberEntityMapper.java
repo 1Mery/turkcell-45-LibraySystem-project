@@ -17,8 +17,8 @@ public class MemberEntityMapper {
                 member.password(),
                 member.username().value(),
                 member.phone().value(),
-                member.level(),
-                member.status()
+                member.level().name(),
+                member.status().name()
         );
     }
 
@@ -33,8 +33,8 @@ public class MemberEntityMapper {
                 new Username(entity.username()),
                 entity.password(),
                 new Phone(entity.phone()),
-                entity.membershipLevel(),
-                entity.memberStatus()
-        );
+                MembershipLevel.valueOf(entity.membershipLevel()),
+                MemberStatus.valueOf(entity.memberStatus())
+                );
     }
 }
