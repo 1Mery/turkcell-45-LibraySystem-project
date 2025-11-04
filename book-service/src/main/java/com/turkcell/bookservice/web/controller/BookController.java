@@ -58,13 +58,13 @@ public class BookController {
         @DeleteMapping("/{id}")
         @ResponseStatus(HttpStatus.NO_CONTENT)
         public void deleteBook(@PathVariable UUID id) {
-            deleteBookHandler.delete(new DeleteBookCommand(id.toString()));
+            deleteBookHandler.delete(new DeleteBookCommand(id));
         }
 
         // GetBookByID
         @GetMapping("/{id}")
         public BookResponseDto getBookById(@PathVariable UUID id) {
-            return getByIdHandler.getBook(new GetBookByIdQuery(id.toString()));
+            return getByIdHandler.getBook(new GetBookByIdQuery(id));
         }
 
         // GetAllBooks

@@ -9,14 +9,14 @@ public class UpdateBookMapper {
 
     public BookResponseDto toResponse(Book book) {
         return new BookResponseDto(
-                book.getId().value().toString(),
+                book.getId().value(),
                 book.getTitle(),
                 book.getAuthor(),
                 book.getIsbn().isbn(),
                 book.getTotalPage(),
                 book.getPublisher(),
                 book.getImageUrl(),
-                book.getCategoryId().value().toString()
+                book.getCategoryId().value()
         );
     }
 }

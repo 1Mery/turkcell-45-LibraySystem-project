@@ -1,5 +1,6 @@
 package com.turkcell.bookservice.application.command.delete;
 
+import com.turkcell.bookservice.domain.model.Book;
 import com.turkcell.bookservice.domain.model.BookId;
 import com.turkcell.bookservice.domain.repository.BookRepository;
 import org.springframework.stereotype.Component;
@@ -16,7 +17,7 @@ public class DeleteBookCommandHandler {
     }
 
     public void delete(DeleteBookCommand command) {
-        BookId id = new BookId(UUID.fromString(command.id()));
+        BookId id = new BookId(command.id());
         bookRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Book not found"));
         bookRepository.delete(id);
