@@ -20,7 +20,7 @@ public class GetBookByIdHandler {
     }
 
     public BookResponseDto getBook(GetBookByIdQuery query) {
-        BookId id = new BookId(UUID.fromString(query.id()));
+        BookId id = new BookId(query.id());
         Book book = bookRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Book not found"));
         return mapper.toResponse(book);
