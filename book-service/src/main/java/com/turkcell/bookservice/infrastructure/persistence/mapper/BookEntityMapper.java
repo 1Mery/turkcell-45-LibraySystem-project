@@ -1,11 +1,12 @@
 package com.turkcell.bookservice.infrastructure.persistence.mapper;
 
-import com.turkcell.bookservice.domain.model.Book;
-import com.turkcell.bookservice.domain.model.BookId;
-import com.turkcell.bookservice.domain.model.CategoryId;
-import com.turkcell.bookservice.domain.model.Isbn;
+import com.turkcell.bookservice.domain.model.*;
 import com.turkcell.bookservice.infrastructure.persistence.entity.BookEntity;
+import com.turkcell.bookservice.infrastructure.persistence.entity.BookItemEntity;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class BookEntityMapper {
@@ -21,12 +22,24 @@ public class BookEntityMapper {
         entity.setPublisher(book.getPublisher());
         entity.setImageUrl(book.getImageUrl());
         entity.setCategoryId(book.getCategoryId().value());
+
+        List<BookItemEntity> itemEntities = book.getItems().stream()
+                .map(this::toEntity)
+                .collect(Collectors.toList());
+        entity.setItems(itemEntities);
+        return entity;
+    }
+
+    private BookItemEntity toEntity(BookItem item) {
+        BookItemEntity entity = new BookItemEntity();
+        entity.setId(item.getId().value());
+        entity.setStatus(item.getStatus());
         return entity;
     }
 
     // Entity → Domain
     public Book toDomain(BookEntity entity) {
-        return Book.rehydrate(
+        Book book = Book.rehydrate(
                 new BookId(entity.getId()),
                 entity.getTitle(),
                 entity.getAuthor(),
@@ -36,5 +49,17 @@ public class BookEntityMapper {
                 entity.getImageUrl(),
                 new CategoryId(entity.getCategoryId())
         );
+
+        if (entity.getItems() != null) {
+            entity.getItems().forEach(item ->
+                    book.addCopy(BookItem.rehydrate(
+                            new BookItemId(item.getId()),
+                            item.getStatus()
+                    ))
+            );
+        }
+
+        return book;
     }
+
 }

@@ -2,6 +2,8 @@ package com.turkcell.bookservice.infrastructure.persistence.entity;
 
 import jakarta.persistence.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -32,6 +34,10 @@ public class BookEntity {
 
     @Column(name = "category_id", nullable = false)
     private UUID categoryId;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "book_id") // BookItemEntity tablosunda foreign key olarak "book_id" tutulur
+    private List<BookItemEntity> items = new ArrayList<>();
 
     public UUID getId() {
         return id;
@@ -97,4 +103,11 @@ public class BookEntity {
         this.categoryId = categoryId;
     }
 
+    public List<BookItemEntity> getItems() {
+        return items;
+    }
+
+    public void setItems(List<BookItemEntity> items) {
+        this.items = items;
+    }
 }
