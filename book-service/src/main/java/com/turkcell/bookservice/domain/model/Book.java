@@ -1,5 +1,7 @@
 package com.turkcell.bookservice.domain.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class Book {
@@ -11,6 +13,7 @@ public class Book {
     private String publisher;
     private String imageUrl;
     private CategoryId categoryId;
+    private final List<BookItem> items = new ArrayList<>();
 
 
     public Book(BookId id, String title, String author, Isbn isbn, int totalPage, String publisher, String imageUrl,CategoryId categoryId) {
@@ -81,6 +84,40 @@ private static void validateImageUrl(String imageUrl) {
         this.imageUrl = newImageUrl;
     }
 
+    public void addCopy(BookItem item) {
+        Objects.requireNonNull(item, "BookItem cannot be null");
+        this.items.add(item);
+    }
+
+    public long availableCopiesCount() {
+        return items.stream().filter(BookItem::isAvailable).count();
+    }
+
+    //Ödünç verilecek kopya var mı
+    public boolean hasAvailableCopies() {
+        return availableCopiesCount() > 0;
+    }
+
+    //kopya ödünç ver
+    public void borrowCopy() {
+        BookItem available = items.stream()
+                .filter(BookItem::isAvailable)
+                .findFirst()
+                .orElseThrow(() -> new IllegalStateException("No available copies to borrow"));
+        available.markBorrowed();
+    }
+
+    public void returnCopy(BookItemId itemId) {
+        items.stream()
+                .filter(i -> i.getId().equals(itemId))
+                .findFirst()
+                .ifPresent(BookItem::markReturned);
+    }
+
+    public boolean canBeReserved() {
+        return availableCopiesCount() == 0;
+    }
+
 
     public BookId getId() {
         return id;
@@ -112,6 +149,10 @@ private static void validateImageUrl(String imageUrl) {
 
     public CategoryId getCategoryId() {
         return categoryId;
+    }
+
+    public List<BookItem> getItems() {
+        return items;
     }
 }
 
