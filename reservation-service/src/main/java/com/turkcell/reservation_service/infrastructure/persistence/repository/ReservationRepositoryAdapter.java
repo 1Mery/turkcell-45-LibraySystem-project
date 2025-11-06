@@ -29,21 +29,28 @@ public class ReservationRepositoryAdapter implements ReservationRepository {
 
     @Override
     public Optional<Reservation> findById(ReservationId reservationId) {
-        return Optional.empty();
+        return reservationRepository
+                .findById(reservationId.value())
+                .map(reservationMapper::toDomain);
     }
 
     @Override
     public List<Reservation> findAll() {
-        return List.of();
+        return reservationRepository
+                .findAll()
+                .stream()
+                .map(reservationMapper::toDomain)
+                .toList();
     }
 
     @Override
     public void deleteById(ReservationId reservationId) {
-
+        reservationRepository.deleteById(reservationId.value());
     }
 
     @Override
     public void delete(Reservation reservation) {
-
+        JpaReservationEntity entity = reservationMapper.toEntity(reservation);
+        reservationRepository.delete(entity);
     }
 }
