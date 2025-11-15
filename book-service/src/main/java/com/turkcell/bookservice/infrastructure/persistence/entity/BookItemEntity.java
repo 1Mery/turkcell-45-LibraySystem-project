@@ -12,6 +12,10 @@ public class BookItemEntity {
     @Id
     private UUID id;
 
+    @Column(name = "book_id", nullable = false)
+    private UUID bookId;
+
+
     @Enumerated(EnumType.STRING)
     private BookItemStatus status;
 
@@ -29,5 +33,13 @@ public class BookItemEntity {
 
     public void setStatus(BookItemStatus status) {
         this.status = status;
+    }
+
+    public UUID getBookId() {
+        return bookId;
+    }
+
+    public void setBookId(UUID bookId) {
+        this.bookId = bookId;
     }
 }

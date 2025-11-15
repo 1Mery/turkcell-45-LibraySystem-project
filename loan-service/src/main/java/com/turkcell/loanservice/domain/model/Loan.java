@@ -33,7 +33,7 @@ public class Loan {
 
     public static Loan rehydrate(LoanId id, UserId userId, BookItemId bookItemId,
                                  LoanPeriod period, LoanStatus status, LocalDate returnDate) {
-        return new Loan(id, userId, bookItemId, period, status, null);
+        return new Loan(id, userId, bookItemId, period, status, returnDate);
     }
 
     // Kitap iade edildiğinde çağrılır
@@ -48,8 +48,8 @@ public class Loan {
     }
 
     //Geciken ödünçler için
-    public void markOverdue(LocalDate today) {
-        if (status == LoanStatus.ACTIVE && period.isOverdue(today)) {
+    public void markOverdue() {
+        if (status == LoanStatus.ACTIVE){
             this.status = LoanStatus.OVERDUE;
         }
     }

@@ -7,6 +7,7 @@ import com.turkcell.bookservice.application.command.delete.DeleteBookCommand;
 import com.turkcell.bookservice.application.command.delete.DeleteBookCommandHandler;
 import com.turkcell.bookservice.application.command.update.UpdateBookCommand;
 import com.turkcell.bookservice.application.command.update.UpdateBookCommandHandler;
+import com.turkcell.bookservice.application.dto.BookItemDto;
 import com.turkcell.bookservice.application.dto.BookListResponseDto;
 import com.turkcell.bookservice.application.dto.BookResponseDto;
 import com.turkcell.bookservice.application.dto.InventoryDto;
@@ -123,4 +124,29 @@ public class BookController {
         InventoryDto dto = getInventoryHandler.handle(new GetInventoryQuery(bookId));
         return ResponseEntity.ok(dto);
     }
+
+    // bookItem details (LoanService çağırır)
+    @GetMapping("/items/{itemId}")
+    public BookItemResponse getBookItem(@PathVariable UUID itemId) {
+        return getBookItemHandler.getById(itemId);
+    }
+
+    // sadece title döner (Notification için)
+    @GetMapping("/{bookId}/title")
+    public String getBookTitle(@PathVariable UUID bookId) {
+        return getBookTitleHandler.getTitle(bookId);
+    }
+
+    // bookItem  LOANED
+    @PatchMapping("/items/{itemId}/loan")
+    public void markAsLoaned(@PathVariable UUID itemId) {
+        borrowBookHandler.markAsLoaned(itemId);
+    }
+
+    // bookItem  AVAILABLE
+    @PatchMapping("/items/{itemId}/return")
+    public void markAsReturned(@PathVariable UUID itemId) {
+        returnBookHandler.markAsReturned(itemId);
+    }
+
 }

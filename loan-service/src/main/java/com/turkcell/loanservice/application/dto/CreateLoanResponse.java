@@ -1,16 +1,14 @@
-package com.turkcell.loanservice.domain.event;
+package com.turkcell.loanservice.application.dto;
 
-import java.time.Instant;
 import java.time.LocalDate;
 import java.util.UUID;
 
-public record LoanCreatedEvent(
+public record CreateLoanResponse(
         UUID loanId,
         UUID userId,
         UUID bookItemId,
         LocalDate loanDate,
         LocalDate dueDate,
-        Instant occurredOn
-) implements DomainEvent {
-
+        String status
+) {
 }
