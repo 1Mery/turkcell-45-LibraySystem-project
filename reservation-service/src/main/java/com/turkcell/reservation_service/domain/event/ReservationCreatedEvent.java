@@ -1,14 +1,12 @@
 package com.turkcell.reservation_service.domain.event;
 
-import com.turkcell.reservation_service.domain.model.BookId;
-import com.turkcell.reservation_service.domain.model.ReservationId;
-import com.turkcell.reservation_service.domain.model.ReservationStatus;
+import com.turkcell.reservation_service.domain.model.*;
 
 import java.time.OffsetDateTime;
 
-public record ReservationCreatedEvent(
-        ReservationId id,
+public record ReservationCreatedEvent (
+        ReservationId reservationId,
         OffsetDateTime reservationDate,
-        ReservationStatus reservationStatus,
-        BookId bookId) {
+        BookId bookId,
+        MemberId memberId){
 }

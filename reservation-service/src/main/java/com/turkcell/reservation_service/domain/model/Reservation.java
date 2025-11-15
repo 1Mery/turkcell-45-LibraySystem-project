@@ -1,5 +1,7 @@
 package com.turkcell.reservation_service.domain.model;
 
+import com.turkcell.reservation_service.domain.event.ReservationCancelledEvent;
+
 import java.time.OffsetDateTime;
 
 public class Reservation {
@@ -15,6 +17,7 @@ public class Reservation {
 
     private Reservation(ReservationId id, OffsetDateTime reservationDate, OffsetDateTime expireAt,
             ReservationStatus status, MemberId memberId, BookId bookId) {
+        validateInputs(reservationDate, expireAt, status);
         this.id = id;
         this.reservationDate = reservationDate;
         this.expireAt = expireAt;
@@ -24,7 +27,6 @@ public class Reservation {
     }
 
     public static Reservation create(OffsetDateTime reservationDate, MemberId memberId, BookId bookId) {
-        validateReservationDate(reservationDate);
         // expireAt ilk atamada null olacak.
         return new Reservation(
                 ReservationId.generate(),
@@ -46,40 +48,37 @@ public class Reservation {
                 bookId);
     }
 
-    public void markAsCancelled() {
+    public void updateReservationStatusAsCancelled() {
         this.status = ReservationStatus.CANCELLED;
     }
 
-    public void markAsActive() {
+    public void updateReservationStatusAsActive() {
         this.status = ReservationStatus.ACTIVE;
     }
 
     public void assignPickupWindow() {
+        if(this.status != ReservationStatus.ACTIVE) {
+            throw new IllegalStateException("Reservation can be assigned a pickup window only when status is ACTIVE");
+        }
         if (this.expireAt != null) {
             throw new IllegalStateException("Pickup Window already assigned");
         }
         this.expireAt = OffsetDateTime.now().plusHours(24);
     }
 
-    public static void validateReservationDate(OffsetDateTime reservationDate) {
+    public static void validateInputs(OffsetDateTime reservationDate, OffsetDateTime expireAt, ReservationStatus status) {
         if (reservationDate == null) {
             throw new IllegalArgumentException("Reservation date cannot be null");
         }
         if (reservationDate.isBefore(OffsetDateTime.now())) {
             throw new IllegalArgumentException("Reservation date cannot be before now");
         }
-    }
-
-    public static void validateExpireAt(OffsetDateTime expireAt, OffsetDateTime reservationDate) {
         if (expireAt == null) {
             return; // null is allowed on creation or before pickup window
         }
         if (expireAt.isBefore(reservationDate)) {
             throw new IllegalArgumentException("Expire at cannot be before reservation date " + reservationDate);
         }
-    }
-
-    public static void validateStatus(ReservationStatus status) {
         if (status == null) {
             throw new IllegalArgumentException("ReservationStatus cannot be null");
         }

@@ -1,6 +1,7 @@
 package com.turkcell.reservation_service.domain.model;
 
 public enum ReservationStatus {
+    PENDING,
     ACTIVE,
     /**
      * Reservation is active but not completed
@@ -21,6 +22,6 @@ public enum ReservationStatus {
      */
 
     public static ReservationStatus getDefault(){
-        return ACTIVE;
+        return PENDING;
     }
 }
