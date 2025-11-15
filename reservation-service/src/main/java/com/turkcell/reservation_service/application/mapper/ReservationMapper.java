@@ -1,6 +1,7 @@
 package com.turkcell.reservation_service.application.mapper;
 
 import com.turkcell.reservation_service.application.command.CreateReservationCommand;
+import com.turkcell.reservation_service.application.dto.CancelledReservationResponse;
 import com.turkcell.reservation_service.application.dto.ReservationResponse;
 import com.turkcell.reservation_service.domain.model.Reservation;
 import org.springframework.stereotype.Component;
@@ -25,6 +26,13 @@ public class ReservationMapper {
                 reservation.memberId().value(),
                 reservation.bookId().value(),
                 reservation.reservationDate(),
+                reservation.status().name()
+        );
+    }
+
+    public CancelledReservationResponse toCancelledResponse(Reservation reservation) {
+        return new CancelledReservationResponse(
+                reservation.id().value(),
                 reservation.status().name()
         );
     }

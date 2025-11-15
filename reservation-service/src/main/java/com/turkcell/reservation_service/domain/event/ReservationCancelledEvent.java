@@ -1,6 +1,6 @@
 package com.turkcell.reservation_service.domain.event;
 
-import java.util.UUID;
+import com.turkcell.reservation_service.domain.model.ReservationId;
 
-public record ReservationCancelledEvent(UUID reservationId) {
+public record ReservationCancelledEvent(ReservationId reservationId) {
 }
