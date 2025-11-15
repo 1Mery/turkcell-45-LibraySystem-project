@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 @Component
 public class BookEntityMapper {
 
-    // Domain → Entity
+    // Domain - Entity
     public BookEntity toEntity(Book book) {
         BookEntity entity=new BookEntity();
         entity.setId(book.getId().value());
@@ -24,20 +24,23 @@ public class BookEntityMapper {
         entity.setCategoryId(book.getCategoryId().value());
 
         List<BookItemEntity> itemEntities = book.getItems().stream()
-                .map(this::toEntity)
+                .map(this::toItemEntity)
                 .collect(Collectors.toList());
         entity.setItems(itemEntities);
         return entity;
     }
 
-    private BookItemEntity toEntity(BookItem item) {
+    public BookItemEntity toItemEntity(BookItem item) {
         BookItemEntity entity = new BookItemEntity();
         entity.setId(item.getId().value());
+        entity.setBookId(item.getBookId().value());
         entity.setStatus(item.getStatus());
         return entity;
     }
 
-    // Entity → Domain
+
+
+    // Entity - Domain
     public Book toDomain(BookEntity entity) {
         Book book = Book.rehydrate(
                 new BookId(entity.getId()),
@@ -54,11 +57,11 @@ public class BookEntityMapper {
             entity.getItems().forEach(item ->
                     book.addCopy(BookItem.rehydrate(
                             new BookItemId(item.getId()),
+                            new BookId(item.getBookId()),
                             item.getStatus()
                     ))
             );
         }
-
         return book;
     }
 

@@ -55,7 +55,7 @@ public class BookRepositoryAdapter implements BookRepository {
 
     @Override
     public List<Book> findAllPaged(Integer pageIndex, Integer pageSize) {
-        var pageable = PageRequest.of(pageIndex, pageSize);
+        PageRequest pageable = PageRequest.of(pageIndex, pageSize);
         return jpaRepository.findAll(pageable)
                 .getContent()
                 .stream()
