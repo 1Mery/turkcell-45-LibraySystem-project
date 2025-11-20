@@ -26,7 +26,10 @@ public class ReservationMapper {
                 reservation.memberId().value(),
                 reservation.bookId().value(),
                 reservation.reservationDate(),
-                reservation.status().name()
+                reservation.expireAt(),
+                reservation.status().name(),
+                reservation.cancellationReason(),
+                reservation.lastModifiedAt()
         );
     }
 

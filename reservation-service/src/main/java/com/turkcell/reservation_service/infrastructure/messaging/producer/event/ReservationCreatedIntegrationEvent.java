@@ -1,4 +1,4 @@
-package com.turkcell.reservation_service.infrastructure.messaging.event;
+package com.turkcell.reservation_service.infrastructure.messaging.producer.event;
 
 import java.time.OffsetDateTime;
 import java.util.UUID;

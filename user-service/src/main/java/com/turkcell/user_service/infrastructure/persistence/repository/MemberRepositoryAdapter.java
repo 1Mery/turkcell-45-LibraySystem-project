@@ -2,6 +2,7 @@ package com.turkcell.user_service.infrastructure.persistence.repository;
 
 import com.turkcell.user_service.domain.model.Member;
 import com.turkcell.user_service.domain.model.MemberId;
+import com.turkcell.user_service.domain.model.MembershipLevel;
 import com.turkcell.user_service.domain.port.MemberRepository;
 import com.turkcell.user_service.infrastructure.persistence.entity.JpaMemberEntity;
 import com.turkcell.user_service.infrastructure.persistence.mapper.MemberEntityMapper;
@@ -63,6 +64,13 @@ public class MemberRepositoryAdapter implements MemberRepository {
     public void delete(Member member) {
         JpaMemberEntity entity = memberMapper.toEntity(member);
         memberRepository.delete(entity);
+    }
+
+    @Override
+    public Optional<Member> findByMembershipLevel(MembershipLevel membershipLevel) {
+        return memberRepository
+                .findByMembershipLevel(membershipLevel.name())
+                .map(memberMapper::toDomain);
     }
 
 }

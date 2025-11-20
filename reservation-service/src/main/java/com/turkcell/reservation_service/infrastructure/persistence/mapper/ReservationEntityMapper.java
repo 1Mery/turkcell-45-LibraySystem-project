@@ -1,7 +1,7 @@
 package com.turkcell.reservation_service.infrastructure.persistence.mapper;
 
 import com.turkcell.reservation_service.domain.model.*;
-import com.turkcell.reservation_service.infrastructure.persistence.model.JpaReservationEntity;
+import com.turkcell.reservation_service.infrastructure.persistence.entity.JpaReservationEntity;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -14,7 +14,9 @@ public class ReservationEntityMapper {
                 reservation.expireAt(),
                 reservation.status().name(),
                 reservation.memberId().value(),
-                reservation.bookId().value()
+                reservation.bookId().value(),
+                reservation.cancellationReason(),
+                reservation.lastModifiedAt()
         );
     }
 
@@ -25,7 +27,9 @@ public class ReservationEntityMapper {
                 entity.expireAt(),
                 ReservationStatus.valueOf(entity.status()),
                 new MemberId(entity.memberId()),
-                new BookId(entity.bookId())
+                new BookId(entity.bookId()),
+                entity.cancellationReason(),
+                entity.lastModifiedAt()
         );
     }
 
