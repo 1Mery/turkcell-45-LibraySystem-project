@@ -1,4 +1,4 @@
-package com.turkcell.reservation_service.infrastructure.persistence.model;
+package com.turkcell.reservation_service.infrastructure.persistence.entity;
 
 
 import jakarta.persistence.Column;
@@ -28,17 +28,26 @@ public class JpaReservationEntity {
     private UUID memberId;
     @Column(name = "book_id")
     private UUID bookId;
+    
+    @Column(name = "cancellation_reason", length = 500)
+    private String cancellationReason;
+    
+    @Column(name = "last_modified_at")
+    private OffsetDateTime lastModifiedAt;
 
     public JpaReservationEntity() {
     }
 
-    public JpaReservationEntity(UUID id, OffsetDateTime reservationDate, OffsetDateTime expireAt, String status, UUID memberId, UUID bookId) {
+    public JpaReservationEntity(UUID id, OffsetDateTime reservationDate, OffsetDateTime expireAt, String status, 
+                                UUID memberId, UUID bookId, String cancellationReason, OffsetDateTime lastModifiedAt) {
         this.id = id;
         this.reservationDate = reservationDate;
         this.expireAt = expireAt;
         this.status = status;
         this.memberId = memberId;
         this.bookId = bookId;
+        this.cancellationReason = cancellationReason;
+        this.lastModifiedAt = lastModifiedAt;
     }
 
 
@@ -88,5 +97,21 @@ public class JpaReservationEntity {
 
     public void setBookId(UUID bookId) {
         this.bookId = bookId;
+    }
+    
+    public String cancellationReason() {
+        return cancellationReason;
+    }
+    
+    public void setCancellationReason(String cancellationReason) {
+        this.cancellationReason = cancellationReason;
+    }
+    
+    public OffsetDateTime lastModifiedAt() {
+        return lastModifiedAt;
+    }
+    
+    public void setLastModifiedAt(OffsetDateTime lastModifiedAt) {
+        this.lastModifiedAt = lastModifiedAt;
     }
 }

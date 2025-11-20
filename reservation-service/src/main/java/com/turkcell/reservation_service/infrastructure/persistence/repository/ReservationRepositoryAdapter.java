@@ -1,10 +1,9 @@
 package com.turkcell.reservation_service.infrastructure.persistence.repository;
 
-import com.turkcell.reservation_service.domain.model.Reservation;
-import com.turkcell.reservation_service.domain.model.ReservationId;
+import com.turkcell.reservation_service.domain.model.*;
 import com.turkcell.reservation_service.domain.port.ReservationRepository;
 import com.turkcell.reservation_service.infrastructure.persistence.mapper.ReservationEntityMapper;
-import com.turkcell.reservation_service.infrastructure.persistence.model.JpaReservationEntity;
+import com.turkcell.reservation_service.infrastructure.persistence.entity.JpaReservationEntity;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -52,5 +51,53 @@ public class ReservationRepositoryAdapter implements ReservationRepository {
     public void delete(Reservation reservation) {
         JpaReservationEntity entity = reservationMapper.toEntity(reservation);
         reservationRepository.delete(entity);
+    }
+
+    @Override
+    public boolean existsByMemberIdAndBookIdAndStatus(MemberId memberId, BookId bookId, ReservationStatus reservationStatus) {
+        return reservationRepository.existsByMemberIdAndBookIdAndStatus(
+                memberId.value(), bookId.value(), reservationStatus.name()
+        );
+    }
+    
+    @Override
+    public List<Reservation> findExpiredReservations() {
+        return reservationRepository
+                .findExpiredReservations(java.time.OffsetDateTime.now())
+                .stream()
+                .map(reservationMapper::toDomain)
+                .toList();
+    }
+    
+    @Override
+    public List<Reservation> findByBookIdAndStatus(BookId bookId, ReservationStatus status) {
+        return reservationRepository
+                .findByBookIdAndStatus(bookId.value(), status.name())
+                .stream()
+                .map(reservationMapper::toDomain)
+                .toList();
+    }
+    
+    @Override
+    public List<Reservation> findByMemberId(MemberId memberId) {
+        return reservationRepository
+                .findByMemberId(memberId.value())
+                .stream()
+                .map(reservationMapper::toDomain)
+                .toList();
+    }
+    
+    @Override
+    public long countByMemberIdAndStatus(MemberId memberId, ReservationStatus status) {
+        return reservationRepository.countByMemberIdAndStatus(memberId.value(), status.name());
+    }
+    
+    @Override
+    public List<Reservation> findByBookIdOrderByPriorityDescReservationDateAsc(BookId bookId) {
+        return reservationRepository
+                .findByBookIdOrderByPriorityDescReservationDateAsc(bookId.value())
+                .stream()
+                .map(reservationMapper::toDomain)
+                .toList();
     }
 }

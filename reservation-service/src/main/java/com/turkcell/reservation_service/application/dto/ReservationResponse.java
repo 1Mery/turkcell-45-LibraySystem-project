@@ -8,6 +8,9 @@ public record ReservationResponse(
         UUID memberId,
         UUID bookId,
         OffsetDateTime reservationDate,
-        String reservationStatus
+        OffsetDateTime expireAt,
+        String reservationStatus,
+        String cancellationReason,
+        OffsetDateTime lastModifiedAt
 ) {
 }

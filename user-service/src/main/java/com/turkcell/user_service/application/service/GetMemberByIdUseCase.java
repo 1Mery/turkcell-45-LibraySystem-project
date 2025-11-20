@@ -6,9 +6,7 @@ import com.turkcell.user_service.application.mapper.MemberMapper;
 import com.turkcell.user_service.domain.model.Member;
 import com.turkcell.user_service.domain.model.MemberId;
 import com.turkcell.user_service.domain.port.MemberRepository;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.UUID;
 
