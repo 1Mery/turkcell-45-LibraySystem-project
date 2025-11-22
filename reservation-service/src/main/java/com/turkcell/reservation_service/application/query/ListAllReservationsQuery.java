@@ -5,5 +5,5 @@ import com.turkcell.reservation_service.core.cqrs.Query;
 
 import java.util.List;
 
-public record ListAllMyReservationsQuery() implements Query<List<ReservationResponse>> {
+public record ListAllReservationsQuery() implements Query<List<ReservationResponse>> {
 }

@@ -17,7 +17,7 @@ public class ReservationsController {
 
     private final CommandHandler<CreateReservationCommand, ReservationResponse> createReservationCommand;
     private final QueryHandler<GetReservationByIdQuery, ReservationResponse> getReservationByIdQuery;
-    private final QueryHandler<ListAllMyReservationsQuery, List<ReservationResponse>> listAllMyReservationsQuery;
+    private final QueryHandler<ListAllReservationsQuery, List<ReservationResponse>> listAllMyReservationsQuery;
     private final CommandHandler<DeleteReservationCommand, DeletedReservationResponse> deleteReservationCommand;
     private final CommandHandler<CancelReservationCommand, CancelledReservationResponse> cancelReservationCommand;
     private final CommandHandler<ActivateReservationCommand, ReservationResponse> activateReservationCommand;
@@ -27,7 +27,7 @@ public class ReservationsController {
     public ReservationsController(
             CommandHandler<CreateReservationCommand, ReservationResponse> createReservationCommand,
             QueryHandler<GetReservationByIdQuery, ReservationResponse> getReservationByIdQuery,
-            QueryHandler<ListAllMyReservationsQuery, List<ReservationResponse>> listAllMyReservationsQuery,
+            QueryHandler<ListAllReservationsQuery, List<ReservationResponse>> listAllMyReservationsQuery,
             CommandHandler<DeleteReservationCommand, DeletedReservationResponse> deleteReservationCommand,
             CommandHandler<CancelReservationCommand, CancelledReservationResponse> cancelReservationCommand,
             CommandHandler<ActivateReservationCommand, ReservationResponse> activateReservationCommand,
@@ -56,7 +56,7 @@ public class ReservationsController {
 
     @GetMapping()
     public List<ReservationResponse> getAll(){
-        return listAllMyReservationsQuery.handle(new ListAllMyReservationsQuery());
+        return listAllMyReservationsQuery.handle(new ListAllReservationsQuery());
     }
 
     @DeleteMapping("/{id}")

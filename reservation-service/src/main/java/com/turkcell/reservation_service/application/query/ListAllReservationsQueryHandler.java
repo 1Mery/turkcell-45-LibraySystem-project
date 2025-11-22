@@ -10,18 +10,18 @@ import java.util.List;
 
 //for Admin query
 @Component
-public class ListAllMyReservationsQueryHandler implements QueryHandler<ListAllMyReservationsQuery, List<ReservationResponse>> {
+public class ListAllReservationsQueryHandler implements QueryHandler<ListAllReservationsQuery, List<ReservationResponse>> {
 
     private final ReservationRepository reservationRepository;
     private final ReservationMapper reservationMapper;
 
-    public ListAllMyReservationsQueryHandler(ReservationRepository reservationRepository, ReservationMapper reservationMapper) {
+    public ListAllReservationsQueryHandler(ReservationRepository reservationRepository, ReservationMapper reservationMapper) {
         this.reservationRepository = reservationRepository;
         this.reservationMapper = reservationMapper;
     }
 
     @Override
-    public List<ReservationResponse> handle(ListAllMyReservationsQuery query) {
+    public List<ReservationResponse> handle(ListAllReservationsQuery query) {
         return reservationRepository
                 .findAll()
                 .stream()
