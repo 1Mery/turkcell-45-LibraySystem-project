@@ -1,7 +1,8 @@
 package com.turkcell.notificationservice.application.usecase;
 
 public record SendLoanReturnedLateNotificationCommand(
-        String email,
+        String userEmail,
+        String userName,
         String bookTitle,
         int daysOverdue
 ) {}
