@@ -1,3 +1,17 @@
+spring:
+  cloud:
+    stream:
+      defaultBinder: kafka
+      bindings:
+        loan-events-out-0:
+          destination: loan-events          # Kafka topic adı
+          content-type: application/json
+      kafka:
+        binder:
+          brokers: localhost:9094
+          auto-create-topics: true
+
+
 eureka:
   client:
     service-url:

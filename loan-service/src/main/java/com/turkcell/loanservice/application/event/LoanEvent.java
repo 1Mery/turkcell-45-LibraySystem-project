@@ -1,6 +1,5 @@
 package com.turkcell.loanservice.application.event;
 
-import java.time.Instant;
 
 public record LoanEvent(
         String userEmail,

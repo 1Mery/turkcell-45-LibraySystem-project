@@ -18,44 +18,58 @@ import java.util.UUID;
 public class OverdueLoanCheckCommandHandler {
 
     private final LoanRepository repository;
+    private final UserClient userClient;
+    private final BookClient bookClient;
+    private final LoanEventMapper eventMapper;
     private final LoanEventPublisher publisher;
-    private final UserClient user;
-    private final BookClient book;
 
-    public OverdueLoanCheckCommandHandler(LoanRepository repository, LoanEventPublisher publisher, UserClient user, BookClient book) {
+    public OverdueLoanCheckCommandHandler(LoanRepository repository,
+                                          UserClient userClient,
+                                          BookClient bookClient,
+                                          LoanEventMapper eventMapper,
+                                          LoanEventPublisher publisher) {
         this.repository = repository;
+        this.userClient = userClient;
+        this.bookClient = bookClient;
+        this.eventMapper = eventMapper;
         this.publisher = publisher;
-        this.user = user;
-        this.book = book;
     }
 
-    public void loanCheck(){
-        LocalDate today=LocalDate.now();
+    public void loanCheck() {
+        LocalDate today = LocalDate.now();
 
-        List<Loan> activeLoans=repository.findAllByStatus(LoanStatus.ACTIVE);
+        //Tüm aktif loanları al
+        List<Loan> activeLoans = repository.findAllByStatus(LoanStatus.ACTIVE);
 
-        for (Loan loan:activeLoans){
-            if (loan.getPeriod().isOverdue(today)){
+        for (Loan loan : activeLoans) {
+            // Gecikmemişse atla
+            if (!loan.isOverdueOn(today)) {
+                continue;
+            }
+
                 UUID userId = loan.getUserId().value();
-                String email = user.getEmail(userId);
-                String userName = user.getName(userId);
+                UUID bookItemId = loan.getBookItemId().value();
 
-                String bookItemId = loan.getBookItemId().value().toString();
-                String bookTitle = book.getBookTitle(bookItemId);
+                //Kullanıcı ve kitap bilgilerini Feign ile çek
+                String email = userClient.getEmail(userId);
+                String userName = userClient.getName(userId);
+                String bookTitle = bookClient.getBookTitle(bookItemId);
 
-                LoanEvent event = LoanEventMapper.toOverdueEvent(
+                //Event'e map et
+                LoanEvent event = eventMapper.toOverdueEvent(
                         loan,
                         email,
                         userName,
-                        bookTitle
+                        bookTitle,
+                        today
                 );
 
+                //Kafka’ya gönder
                 publisher.publish(event);
 
+                //Loanı OVERDUE olarak kaydet
                 loan.markOverdue();
-
                 repository.save(loan);
             }
         }
     }
-}

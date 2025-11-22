@@ -1,5 +1,6 @@
 package com.turkcell.bookservice.application.dto;
 
+import java.util.List;
 import java.util.UUID;
 
 public record BookResponseDto(
@@ -10,5 +11,7 @@ public record BookResponseDto(
         Integer totalPage,
         String publisher,
         String imageUrl,
-        UUID categoryId
+        String categoryName,
+        List<BookItemDto> items,
+        InventoryDto inventory
 ) {}

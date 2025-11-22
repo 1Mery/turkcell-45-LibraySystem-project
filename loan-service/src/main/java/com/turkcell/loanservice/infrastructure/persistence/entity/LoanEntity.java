@@ -15,16 +15,26 @@ import java.util.UUID;
 public class LoanEntity {
 
     @Id
+    @Column(name = "id", nullable = false, updatable = false)
     private UUID id;
 
+    @Column(name = "user_id", nullable = false)
     private UUID userId;
+
+    @Column(name = "book_item_id", nullable = false)
     private UUID bookItemId;
 
+    @Column(name = "loan_date", nullable = false)
     private LocalDate loanDate;
+
+    @Column(name = "due_date", nullable = false)
     private LocalDate dueDate;
+
+    @Column(name = "return_date")
     private LocalDate returnDate;
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
     private LoanStatus status;
 
     //getter ve setter'lar için lombok kullandım
