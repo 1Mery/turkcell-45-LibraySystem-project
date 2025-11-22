@@ -1,4 +1,4 @@
-package com.turkcell.bookservice.application.command.bokkItemCommands;
+package com.turkcell.bookservice.application.command.bookItemCommands;
 
 import java.util.UUID;
 

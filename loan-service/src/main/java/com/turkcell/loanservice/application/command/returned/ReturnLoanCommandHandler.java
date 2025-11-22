@@ -6,70 +6,83 @@ import com.turkcell.loanservice.application.dto.ReturnLoanResponse;
 import com.turkcell.loanservice.application.event.LoanEventMapper;
 import com.turkcell.loanservice.application.event.LoanEventPublisher;
 import com.turkcell.loanservice.application.event.LoanEvent;
+import com.turkcell.loanservice.application.exception.LoanAlreadyReturnedException;
+import com.turkcell.loanservice.application.exception.LoanNotFoundException;
 import com.turkcell.loanservice.application.mapper.LoanMapper;
 import com.turkcell.loanservice.domain.model.Loan;
 import com.turkcell.loanservice.domain.model.LoanId;
+import com.turkcell.loanservice.domain.model.LoanStatus;
 import com.turkcell.loanservice.domain.repository.LoanRepository;
 
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 @Service
 public class ReturnLoanCommandHandler {
 
     private final LoanRepository loanRepository;
-    private final LoanEventMapper mapper;
+    private final LoanMapper loanMapper;
     private final UserClient userClient;
     private final BookClient bookClient;
-    private final LoanMapper loanMapper;
+    private final LoanEventMapper eventMapper;
     private final LoanEventPublisher publisher;
 
-    public ReturnLoanCommandHandler(LoanRepository loanRepository, LoanEventMapper mapper, UserClient userClient, BookClient bookClient, LoanMapper loanMapper, LoanEventPublisher publisher) {
+    public ReturnLoanCommandHandler(LoanRepository loanRepository,
+                                    LoanMapper loanMapper,
+                                    UserClient userClient,
+                                    BookClient bookClient,
+                                    LoanEventMapper eventMapper,
+                                    LoanEventPublisher publisher) {
         this.loanRepository = loanRepository;
-        this.mapper = mapper;
+        this.loanMapper = loanMapper;
         this.userClient = userClient;
         this.bookClient = bookClient;
-        this.loanMapper = loanMapper;
+        this.eventMapper = eventMapper;
         this.publisher = publisher;
     }
 
     public ReturnLoanResponse returnLoan(ReturnLoanCommand command) {
-        //Loan bul
+
+        // Loan bul
         Loan loan = loanRepository.findById(new LoanId(command.loanId()))
-                .orElseThrow(() -> new IllegalArgumentException("Loan not found"));
+                .orElseThrow(() -> new LoanNotFoundException(command.loanId()));
 
-        LocalDate today = command.returnDate();
+        if (loan.getStatus() == LoanStatus.RETURNED) {
+            throw new LoanAlreadyReturnedException();
+        }
 
-        //Domain davranışı kitabı iade et
-        loan.markReturned(today);
+        // Domainde iade et
+        LocalDate returnDate = command.returnDate();
+        loan.markReturned(returnDate);
 
-        //Overdue kontrolü
-        boolean isLate = loan.getPeriod().isOverdue(today);
+        // Book-service bu item artık AVAILABLE
+        UUID bookItemId = loan.getBookItemId().value();
+        bookClient.markReturned(bookItemId);
 
-        if (isLate) {
+        // Geç iade ise event gönder
+        if (loan.isLateReturn()) {
 
-            //User name ve email Feign ile al
-            String userEmail = userClient.getEmail(loan.getUserId().value());
-            String userName=userClient.getName(loan.getUserId().value());
+            UUID userId = loan.getUserId().value();
 
-            // Book title Feign ile al
-            String bookTitle = bookClient.getBookTitle(loan.getBookItemId().value().toString());
+            String email = userClient.getEmail(userId);
+            String userName = userClient.getName(userId);
+            String bookTitle = bookClient.getBookTitle(bookItemId);
 
-            //event oluştur
-            LoanEvent event = mapper.toReturnedLateEvent(
+            LoanEvent event = eventMapper.toLateReturnEvent(
                     loan,
-                    userEmail,
+                    email,
                     userName,
                     bookTitle,
-                    command.returnDate()
+                    returnDate
             );
 
-            //Kafka’ya gönder
+            // Kafkaya gönder
             publisher.publish(event);
         }
 
-        //Loan kaydet
+        // Loanı kaydet
         loanRepository.save(loan);
 
         return loanMapper.toReturnResponse(loan);

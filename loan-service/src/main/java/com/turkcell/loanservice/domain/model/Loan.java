@@ -54,6 +54,21 @@ public class Loan {
         }
     }
 
+    public boolean isOverdueOn(LocalDate date) {
+        // Eğer loan aktif değilse gecikme kontrolü yapmaya gerek yok
+        if (status != LoanStatus.ACTIVE && status != LoanStatus.OVERDUE) {
+            return false;
+        }
+
+        // dueDate < date ise gecikmiştir
+        return date.isAfter(period.getDueDate());
+    }
+
+    public boolean isLateReturn() {
+        if (returnDate == null) return false;
+        return returnDate.isAfter(period.getDueDate());
+    }
+
 
     public LoanId getId() {
         return id;

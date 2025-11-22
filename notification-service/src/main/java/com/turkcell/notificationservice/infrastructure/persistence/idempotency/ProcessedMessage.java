@@ -1,4 +1,4 @@
-package com.turkcell.notificationservice.messaging.idempotency;
+package com.turkcell.notificationservice.infrastructure.persistence.idempotency;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -3,14 +3,31 @@ eureka:
     service-url:
       defaultZone: http://localhost:8761/eureka/
 
-  kafka:
-    bootstrap-servers: localhost:9094
   cloud:
+    function:
+      # Bu servis hangi fonksiyonları dinliyor
+      definition: loanOverdueEvent;reservationCreated;fineIssuedEvent
+
     stream:
-      kafka:
-        binders:
-          brokers: localhost:9094
+      defaultBinder: kafka
+
       bindings:
+        loanOverdueEvent-in-0:
+          destination: loan-events       # loan-service ile aynı topic olmalı
+          group: notification-service    # consumer group adı
+          content-type: application/json
+
         reservationCreated-in-0:
-          destination: reservation-topic
+          destination: reservation-topics
           group: notification-service
+          content-type: application/json
+
+          fineIssuedEvent-in-0:
+            destination: fine-events
+            group: notification-service
+            content-type: application/json
+
+      kafka:
+        binder:
+          brokers: localhost:9094
+          autoCreateTopics: true

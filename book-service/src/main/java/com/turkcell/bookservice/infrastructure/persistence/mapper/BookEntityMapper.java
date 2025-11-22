@@ -38,6 +38,14 @@ public class BookEntityMapper {
         return entity;
     }
 
+    public BookItem toItemDomain(BookItemEntity entity) {
+        return BookItem.rehydrate(
+                new BookItemId(entity.getId()),
+                new BookId(entity.getBookId()),
+                entity.getStatus()
+        );
+    }
+
 
 
     // Entity - Domain

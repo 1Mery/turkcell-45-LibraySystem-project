@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class LoanEntityMapper {
 
-    public LoanEntity toEntity(Loan loan){
-        LoanEntity entity= new LoanEntity();
+    public LoanEntity toEntity(Loan loan) {
+        LoanEntity entity = new LoanEntity();
         entity.setId(loan.getId().value());
         entity.setUserId(loan.getUserId().value());
         entity.setBookItemId(loan.getBookItemId().value());
@@ -19,8 +19,8 @@ public class LoanEntityMapper {
         return entity;
     }
 
-    public Loan toDomain(LoanEntity entity){
-        LoanPeriod period=new LoanPeriod(entity.getLoanDate(),entity.getDueDate());
+    public Loan toDomain(LoanEntity entity) {
+        LoanPeriod period = new LoanPeriod(entity.getLoanDate(), entity.getDueDate());
         return Loan.rehydrate(
                 new LoanId(entity.getId()),
                 new UserId(entity.getUserId()),
@@ -30,6 +30,4 @@ public class LoanEntityMapper {
                 entity.getReturnDate()
         );
     }
-
-
 }

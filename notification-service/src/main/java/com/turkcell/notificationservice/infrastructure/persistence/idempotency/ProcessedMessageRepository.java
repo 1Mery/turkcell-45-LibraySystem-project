@@ -1,4 +1,4 @@
-package com.turkcell.notificationservice.messaging.idempotency;
+package com.turkcell.notificationservice.infrastructure.persistence.idempotency;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

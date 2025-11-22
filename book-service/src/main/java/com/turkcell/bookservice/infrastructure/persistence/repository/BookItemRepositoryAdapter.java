@@ -32,7 +32,7 @@ public class BookItemRepositoryAdapter implements BookItemRepository {
         return repository.findById(bookItemId.value()).
                 map(bookItem -> BookItem.rehydrate(
                         new BookItemId(bookItem.getId()),
-                        new BookId(bookItem.getId()),
+                        new BookId(bookItem.getBookId()),
                         bookItem.getStatus()
                 ));
     }

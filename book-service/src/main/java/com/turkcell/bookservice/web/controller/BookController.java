@@ -1,17 +1,19 @@
 package com.turkcell.bookservice.web.controller;
 
-import com.turkcell.bookservice.application.command.bokkItemCommands.*;
+import com.turkcell.bookservice.application.command.bookItemCommands.*;
 import com.turkcell.bookservice.application.command.create.CreateBookCommand;
 import com.turkcell.bookservice.application.command.create.CreateBookCommandHandler;
 import com.turkcell.bookservice.application.command.delete.DeleteBookCommand;
 import com.turkcell.bookservice.application.command.delete.DeleteBookCommandHandler;
 import com.turkcell.bookservice.application.command.update.UpdateBookCommand;
 import com.turkcell.bookservice.application.command.update.UpdateBookCommandHandler;
+import com.turkcell.bookservice.application.command.update.UpdateBookItemStatusHandler;
 import com.turkcell.bookservice.application.dto.BookItemDto;
 import com.turkcell.bookservice.application.dto.BookListResponseDto;
 import com.turkcell.bookservice.application.dto.BookResponseDto;
 import com.turkcell.bookservice.application.dto.InventoryDto;
 import com.turkcell.bookservice.application.query.*;
+import com.turkcell.bookservice.domain.model.BookItemId;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +34,11 @@ public class BookController {
     private final BorrowBookCommandHandler borrowBookHandler;
     private final ReturnBookHandler returnBookHandler;
     private final GetInventoryHandler getInventoryHandler;
+    private final GetBookItemHandler getBookItemHandler;
+    private final GetBookTitleHandler getBookTitleHandler;
+    private final UpdateBookItemStatusHandler updateBookItemStatusHandler;
+    private final GetBookTitleByBookItemIdHandler titleByItemHandler;
+    private final GetBookItemAvailabilityHandler availabilityHandler;
 
     public BookController(CreateBookCommandHandler createBookHandler,
                           UpdateBookCommandHandler updateBookHandler,
@@ -42,7 +49,12 @@ public class BookController {
                           AddBookCopyHandler addBookCopyHandler,
                           BorrowBookCommandHandler borrowBookHandler,
                           ReturnBookHandler returnBookHandler,
-                          GetInventoryHandler getInventoryHandler) {
+                          GetInventoryHandler getInventoryHandler,
+                          GetBookItemHandler getBookItemHandler,
+                          GetBookTitleHandler getBookTitleHandler,
+                          UpdateBookItemStatusHandler updateBookItemStatusHandler,
+                          GetBookTitleByBookItemIdHandler titleByItemHandler,
+                          GetBookItemAvailabilityHandler availabilityHandler) {
         this.createBookHandler = createBookHandler;
         this.updateBookHandler = updateBookHandler;
         this.deleteBookHandler = deleteBookHandler;
@@ -53,6 +65,11 @@ public class BookController {
         this.borrowBookHandler = borrowBookHandler;
         this.returnBookHandler = returnBookHandler;
         this.getInventoryHandler = getInventoryHandler;
+        this.getBookItemHandler = getBookItemHandler;
+        this.getBookTitleHandler = getBookTitleHandler;
+        this.updateBookItemStatusHandler = updateBookItemStatusHandler;
+        this.titleByItemHandler=titleByItemHandler;
+        this.availabilityHandler=availabilityHandler;
     }
 
     // Create Book
@@ -125,10 +142,10 @@ public class BookController {
         return ResponseEntity.ok(dto);
     }
 
-    // bookItem details (LoanService çağırır)
+    // bookItem details
     @GetMapping("/items/{itemId}")
-    public BookItemResponse getBookItem(@PathVariable UUID itemId) {
-        return getBookItemHandler.getById(itemId);
+    public BookItemDto getBookItem(@PathVariable UUID itemId) {
+        return getBookItemHandler.getById(new BookItemId(itemId));
     }
 
     // sadece title döner (Notification için)
@@ -140,13 +157,30 @@ public class BookController {
     // bookItem  LOANED
     @PatchMapping("/items/{itemId}/loan")
     public void markAsLoaned(@PathVariable UUID itemId) {
-        borrowBookHandler.markAsLoaned(itemId);
+        updateBookItemStatusHandler.markAsLoaned(itemId);
     }
 
     // bookItem  AVAILABLE
     @PatchMapping("/items/{itemId}/return")
     public void markAsReturned(@PathVariable UUID itemId) {
-        returnBookHandler.markAsReturned(itemId);
+        updateBookItemStatusHandler.markAsReturned(itemId);
     }
+
+    // bookItem AVAILABLE mı
+    @GetMapping("/items/{itemId}/available")
+    public Boolean isAvailable(@PathVariable UUID itemId) {
+        return availabilityHandler.isAvailable(
+                new GetBookItemAvailabilityQuery(itemId)
+        );
+    }
+
+    // bookItemId üzerinden title (Loan/Notification için)
+    @GetMapping("/items/{itemId}/title")
+    public String getBookTitleByItem(@PathVariable UUID itemId) {
+        return titleByItemHandler.getTitle(
+                new GetBookTitleByBookItemIdQuery(itemId)
+        );
+    }
+
 
 }
