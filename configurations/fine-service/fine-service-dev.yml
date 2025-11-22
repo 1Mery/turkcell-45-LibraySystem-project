@@ -2,3 +2,21 @@ eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka/
+
+spring:
+  kafka:
+    bootstrap-servers: localhost:9094
+
+  cloud:
+    stream:
+      kafka:
+        binders:
+          brokers: localhost:9094
+      bindings:
+        fineCreated-out-0:
+          destination: fine-topic
+          contentType: application/json
+
+        loanOverdueEvent-in-0:
+          destination: loan-events
+          group: fine-service
