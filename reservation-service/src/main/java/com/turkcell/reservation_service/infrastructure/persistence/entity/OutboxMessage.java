@@ -1,4 +1,4 @@
-package com.turkcell.reservation_service.infrastructure.messaging.outbox;
+package com.turkcell.reservation_service.infrastructure.persistence.entity;
 
 import jakarta.persistence.*;
 

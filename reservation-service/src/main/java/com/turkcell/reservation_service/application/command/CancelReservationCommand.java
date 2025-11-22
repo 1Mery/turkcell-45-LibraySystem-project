@@ -5,5 +5,7 @@ import com.turkcell.reservation_service.core.cqrs.Command;
 
 import java.util.UUID;
 
-public record CancelReservationCommand(UUID reservationId) implements Command<CancelledReservationResponse> {
+public record CancelReservationCommand(
+        UUID reservationId,
+        String cancellationReason) implements Command<CancelledReservationResponse> {
 }

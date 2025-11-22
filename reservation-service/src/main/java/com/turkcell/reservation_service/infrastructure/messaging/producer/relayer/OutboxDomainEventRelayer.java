@@ -1,11 +1,11 @@
-package com.turkcell.reservation_service.infrastructure.messaging.relayer;
+package com.turkcell.reservation_service.infrastructure.messaging.producer.relayer;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.turkcell.reservation_service.infrastructure.messaging.event.ReservationCreatedIntegrationEvent;
-import com.turkcell.reservation_service.infrastructure.messaging.outbox.OutboxMessage;
-import com.turkcell.reservation_service.infrastructure.messaging.outbox.OutboxStatus;
-import com.turkcell.reservation_service.infrastructure.messaging.repository.OutboxRepository;
+import com.turkcell.reservation_service.infrastructure.messaging.producer.event.ReservationCreatedIntegrationEvent;
+import com.turkcell.reservation_service.infrastructure.persistence.entity.OutboxMessage;
+import com.turkcell.reservation_service.infrastructure.persistence.entity.OutboxStatus;
+import com.turkcell.reservation_service.infrastructure.persistence.repository.OutboxRepository;
 import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.support.MessageBuilder;
@@ -42,10 +42,7 @@ public class OutboxDomainEventRelayer {
                     .readValue(pendingEvent.payloadJson(), ReservationCreatedIntegrationEvent.class);
 
             //Message ile sarmalladık.
-            Message<ReservationCreatedIntegrationEvent> message =
-                    MessageBuilder
-                            .withPayload(event)
-                            .build();
+            Message<ReservationCreatedIntegrationEvent> message = MessageBuilder.withPayload(event).build();
 
             try{
                 boolean isSent = streamBridge.send("reservationCreated-out-0", message);

@@ -1,6 +1,7 @@
 package com.turkcell.reservation_service.application.client;
 
 import com.turkcell.reservation_service.application.dto.MemberResponse;
+import com.turkcell.reservation_service.application.dto.MembershipLevelResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,5 +13,12 @@ public interface MemberClient {
 
     @GetMapping("/{id}")
     MemberResponse getById(@PathVariable UUID id);
+    
+    /**
+     * Üyenin membership level'ını sorgular.
+     * Performans için tüm üye bilgileri yerine sadece membership level döner.
+     */
+    @GetMapping("/{id}/membership-level")
+    MembershipLevelResponse getMembershipLevel(@PathVariable UUID id);
 
 }

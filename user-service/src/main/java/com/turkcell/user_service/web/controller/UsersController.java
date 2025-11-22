@@ -3,9 +3,11 @@ package com.turkcell.user_service.web.controller;
 import com.turkcell.user_service.application.dto.request.UpdateMemberRequest;
 import com.turkcell.user_service.application.dto.response.DeletedMemberResponse;
 import com.turkcell.user_service.application.dto.response.MemberResponse;
+import com.turkcell.user_service.application.dto.response.MembershipLevelResponse;
 import com.turkcell.user_service.application.service.DeleteMemberUseCase;
 import com.turkcell.user_service.application.service.GetAllMembersUseCase;
 import com.turkcell.user_service.application.service.GetMemberByIdUseCase;
+import com.turkcell.user_service.application.service.GetMembershipLevelUseCase;
 import com.turkcell.user_service.application.service.UpdateMemberUseCase;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
@@ -21,12 +23,14 @@ public class UsersController {
     private final DeleteMemberUseCase deleteMemberUseCase;
     private final GetMemberByIdUseCase getMemberByIdUseCase;
     private final GetAllMembersUseCase getAllMembersUseCase;
+    private final GetMembershipLevelUseCase getMembershipLevelUseCase;
 
-    public UsersController(UpdateMemberUseCase updateMemberUseCase, DeleteMemberUseCase deleteMemberUseCase, GetMemberByIdUseCase getMemberByIdUseCase, GetAllMembersUseCase getAllMembersUseCase) {
+    public UsersController(UpdateMemberUseCase updateMemberUseCase, DeleteMemberUseCase deleteMemberUseCase, GetMemberByIdUseCase getMemberByIdUseCase, GetAllMembersUseCase getAllMembersUseCase, GetMembershipLevelUseCase getMembershipLevelUseCase) {
         this.updateMemberUseCase = updateMemberUseCase;
         this.deleteMemberUseCase = deleteMemberUseCase;
         this.getMemberByIdUseCase = getMemberByIdUseCase;
         this.getAllMembersUseCase = getAllMembersUseCase;
+        this.getMembershipLevelUseCase = getMembershipLevelUseCase;
     }
 
 
@@ -44,6 +48,12 @@ public class UsersController {
     @GetMapping("/{id}")
     public MemberResponse getById(@PathVariable UUID id){
         return getMemberByIdUseCase.getById(id);
+    }
+
+
+    @GetMapping("/{id}/membership-level")
+    public MembershipLevelResponse getMembershipLevel(@PathVariable UUID id){
+        return getMembershipLevelUseCase.getMembershipLevelById(id);
     }
 
     @GetMapping

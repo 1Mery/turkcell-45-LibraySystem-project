@@ -1,4 +1,4 @@
-package com.turkcell.notificationservice.infrastructure.persistence.idempotency;
+package com.turkcell.reservation_service.infrastructure.messaging.consumer.idempotency;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,7 +15,7 @@ public class ProcessedMessage {
     @Column(columnDefinition = "uuid")
     private UUID id;
 
-    @Column(name = "message_id", nullable = false)
+    @Column(name = "event_id", nullable = false)
     private UUID eventId;
 
     public ProcessedMessage() {

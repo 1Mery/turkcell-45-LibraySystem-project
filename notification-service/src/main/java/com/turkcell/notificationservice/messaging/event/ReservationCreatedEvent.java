@@ -6,7 +6,7 @@ import java.util.UUID;
 public record ReservationCreatedEvent(
         UUID id,
         OffsetDateTime reservationDate,
-        String reservationStatus,
-        UUID bookId
+        UUID bookId,
+        UUID memberId
 ) {
 }

@@ -1,4 +1,6 @@
 package com.turkcell.reservation_service.domain.event;
 
-public record ReservationExpiredEvent() {
+import com.turkcell.reservation_service.domain.model.ReservationId;
+
+public record ReservationExpiredEvent(ReservationId reservationId) {
 }
