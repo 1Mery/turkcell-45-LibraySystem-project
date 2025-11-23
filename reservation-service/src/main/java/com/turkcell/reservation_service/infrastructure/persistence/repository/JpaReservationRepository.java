@@ -23,5 +23,5 @@ public interface JpaReservationRepository extends JpaRepository<JpaReservationEn
 
     long countByMemberIdAndStatus(UUID memberId, String status);
 
-    List<JpaReservationEntity> findByBookIdOrderByPriorityDescReservationDateAsc(UUID bookId);
+    List<JpaReservationEntity> findByBookIdOrderByReservationDateAsc(UUID bookId);
 }
