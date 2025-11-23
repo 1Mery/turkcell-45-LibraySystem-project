@@ -3,6 +3,8 @@ package com.turkcell.loanservice.web.exception;
 import com.turkcell.loanservice.application.exception.BookItemNotAvailableException;
 import com.turkcell.loanservice.application.exception.LoanAlreadyReturnedException;
 import com.turkcell.loanservice.application.exception.LoanNotFoundException;
+import com.turkcell.loanservice.domain.exception.InvalidLoanOperationException;
+import com.turkcell.loanservice.domain.exception.InvalidLoanPeriodException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -34,4 +36,17 @@ public class GlobalExceptionHandler {
     public ErrorResponse handleGeneric(Exception ex) {
         return new ErrorResponse("INTERNAL_SERVER_ERROR", "Unexpected error occurred.");
     }
+
+    @ExceptionHandler(InvalidLoanPeriodException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleInvalidLoanPeriod(InvalidLoanPeriodException ex) {
+        return new ErrorResponse("INVALID_LOAN_PERIOD", ex.getMessage());
+    }
+
+    @ExceptionHandler(InvalidLoanOperationException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleInvalidLoanOperation(InvalidLoanOperationException ex) {
+        return new ErrorResponse("INVALID_LOAN_OPERATION", ex.getMessage());
+    }
+
 }

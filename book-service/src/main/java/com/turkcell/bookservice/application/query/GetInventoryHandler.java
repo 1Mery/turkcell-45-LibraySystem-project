@@ -2,6 +2,7 @@ package com.turkcell.bookservice.application.query;
 
 import com.turkcell.bookservice.application.command.InventoryCalculator;
 import com.turkcell.bookservice.application.dto.InventoryDto;
+import com.turkcell.bookservice.application.exception.BookNotFoundException;
 import com.turkcell.bookservice.domain.model.Book;
 import com.turkcell.bookservice.domain.model.BookId;
 import com.turkcell.bookservice.domain.repository.BookRepository;
@@ -22,7 +23,7 @@ public class GetInventoryHandler {
     public InventoryDto handle(GetInventoryQuery query) {
 
         Book book = bookRepository.findById(new BookId(query.bookId()))
-                .orElseThrow(() -> new IllegalArgumentException("Book not found"));
+                .orElseThrow(() -> new BookNotFoundException(query.bookId()));
 
         return inventoryCalculator.calculate(book);
     }

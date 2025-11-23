@@ -1,5 +1,6 @@
 package com.turkcell.bookservice.application.command.bookItemCommands;
 
+import com.turkcell.bookservice.application.exception.BookNotFoundException;
 import com.turkcell.bookservice.domain.model.Book;
 import com.turkcell.bookservice.domain.model.BookId;
 import com.turkcell.bookservice.domain.repository.BookRepository;
@@ -18,7 +19,7 @@ public class BorrowBookCommandHandler {
     @Transactional
     public void borrowBook(BorrowBookCommand cmd) {
         Book book = bookRepository.findById(new BookId(cmd.bookId()))
-                .orElseThrow(() -> new IllegalArgumentException("Book not found"));
+                .orElseThrow(() -> new BookNotFoundException(cmd.bookId()));
         book.borrowCopy();                // domain kuralı
         bookRepository.save(book);
     }

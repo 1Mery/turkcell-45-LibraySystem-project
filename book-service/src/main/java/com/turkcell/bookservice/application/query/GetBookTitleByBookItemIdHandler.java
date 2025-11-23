@@ -1,5 +1,6 @@
 package com.turkcell.bookservice.application.query;
 
+import com.turkcell.bookservice.application.exception.BookNotFoundException;
 import com.turkcell.bookservice.domain.model.Book;
 import com.turkcell.bookservice.domain.model.BookId;
 import com.turkcell.bookservice.domain.model.BookItem;
@@ -31,7 +32,7 @@ public class GetBookTitleByBookItemIdHandler {
 
         //Book bul
         Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new IllegalArgumentException("Book not found"));
+                .orElseThrow(() -> new BookNotFoundException(bookId.value()));
 
         //Title dön
         return book.getTitle();

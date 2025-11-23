@@ -1,7 +1,7 @@
 spring:
   cloud:
     stream:
-      defaultBinder: kafka
+      default-binder: kafka
       bindings:
         loan-events-out-0:
           destination: loan-events          # Kafka topic adı

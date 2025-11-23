@@ -1,5 +1,7 @@
 package com.turkcell.loanservice.domain.model;
 
+import com.turkcell.loanservice.domain.exception.InvalidLoanOperationException;
+
 import java.time.LocalDate;
 import java.util.Objects;
 
@@ -39,9 +41,9 @@ public class Loan {
     // Kitap iade edildiğinde çağrılır
     public void markReturned(LocalDate returnDate) {
         if (status != LoanStatus.ACTIVE)
-            throw new IllegalStateException("Only ACTIVE loans can be returned");
+            throw new InvalidLoanOperationException("Only ACTIVE loans can be returned");
         if (returnDate == null)
-            throw new IllegalArgumentException("Return date cannot be null");
+            throw new InvalidLoanOperationException("Return date cannot be null");
 
         this.returnDate = returnDate;
         this.status = LoanStatus.RETURNED;
