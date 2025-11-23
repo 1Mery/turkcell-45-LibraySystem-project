@@ -54,12 +54,12 @@ public class ReservationRepositoryAdapter implements ReservationRepository {
     }
 
     @Override
-    public boolean existsByMemberIdAndBookIdAndStatus(MemberId memberId, BookId bookId, ReservationStatus reservationStatus) {
+    public boolean existsByMemberIdAndBookIdAndStatus(MemberId memberId, BookId bookId,
+            ReservationStatus reservationStatus) {
         return reservationRepository.existsByMemberIdAndBookIdAndStatus(
-                memberId.value(), bookId.value(), reservationStatus.name()
-        );
+                memberId.value(), bookId.value(), reservationStatus.name());
     }
-    
+
     @Override
     public List<Reservation> findExpiredReservations() {
         return reservationRepository
@@ -68,7 +68,7 @@ public class ReservationRepositoryAdapter implements ReservationRepository {
                 .map(reservationMapper::toDomain)
                 .toList();
     }
-    
+
     @Override
     public List<Reservation> findByBookIdAndStatus(BookId bookId, ReservationStatus status) {
         return reservationRepository
@@ -93,9 +93,9 @@ public class ReservationRepositoryAdapter implements ReservationRepository {
     }
     
     @Override
-    public List<Reservation> findByBookIdOrderByPriorityDescReservationDateAsc(BookId bookId) {
+    public List<Reservation> findByBookIdOrderByReservationDateAsc(BookId bookId) {
         return reservationRepository
-                .findByBookIdOrderByPriorityDescReservationDateAsc(bookId.value())
+                .findByBookIdOrderByReservationDateAsc(bookId.value())
                 .stream()
                 .map(reservationMapper::toDomain)
                 .toList();

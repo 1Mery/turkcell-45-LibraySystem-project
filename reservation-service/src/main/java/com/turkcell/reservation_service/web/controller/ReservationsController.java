@@ -50,27 +50,27 @@ public class ReservationsController {
     }
 
     @GetMapping("/{id}")
-    public ReservationResponse getById(@PathVariable UUID id){
+    public ReservationResponse getById(@PathVariable UUID id) {
         return getReservationByIdQuery.handle(new GetReservationByIdQuery(id));
     }
 
     @GetMapping()
-    public List<ReservationResponse> getAll(){
+    public List<ReservationResponse> getAll() {
         return listAllMyReservationsQuery.handle(new ListAllReservationsQuery());
     }
 
     @DeleteMapping("/{id}")
-    public DeletedReservationResponse delete(@PathVariable UUID id){
+    public DeletedReservationResponse delete(@PathVariable UUID id) {
         return deleteReservationCommand.handle(new DeleteReservationCommand(id));
     }
 
     @PatchMapping("/{id}")
     public CancelledReservationResponse cancel(
             @PathVariable UUID id,
-            @RequestParam(required = false) String reason){
+            @RequestParam(required = false) String reason) {
         return cancelReservationCommand.handle(new CancelReservationCommand(id, reason));
     }
-    
+
     /**
      * Belirli bir rezervasyonu aktif eder (PENDING -> ACTIVE)
      */
@@ -88,7 +88,8 @@ public class ReservationsController {
     }
 
     /**
-     * Belirli bir kitap için rezervasyonları döner (opsiyonel olarak status'e göre filtreler)
+     * Belirli bir kitap için rezervasyonları döner (opsiyonel olarak status'e göre
+     * filtreler)
      */
     @GetMapping("/books/{bookId}")
     public List<ReservationResponse> getReservationsByBook(
@@ -96,22 +97,25 @@ public class ReservationsController {
             @RequestParam(required = false) String status) {
         return getReservationsByBookQuery.handle(new GetReservationsByBookQuery(bookId, status));
     }
-    
-//    /**
-//     * Kitap müsait olduğunda otomatik olarak en yüksek priority'ye sahip rezervasyonu aktif eder
-//     */
-//    @PostMapping("/books/{bookId}/activate-when-available")
-//    public ReservationResponse activateReservationWhenAvailable(@PathVariable UUID bookId) {
-//        return activateReservationWhenAvailableCommand.handle(new ActivateReservationWhenAvailableCommand(bookId));
-//    }
-//
-//    /**
-//     * Belirli bir kitap için kuyruk pozisyonlarını günceller
-//     */
-//    @PostMapping("/books/{bookId}/update-queue")
-//    public List<ReservationResponse> updateQueuePositions(@PathVariable UUID bookId) {
-//        return updateQueuePositionsCommand.handle(new UpdateQueuePositionsCommand(bookId));
-//    }
-    
+
+    // /**
+    // * Kitap müsait olduğunda otomatik olarak en eski rezervasyonu aktif eder
+    // */
+    // @PostMapping("/books/{bookId}/activate-when-available")
+    // public ReservationResponse activateReservationWhenAvailable(@PathVariable
+    // UUID bookId) {
+    // return activateReservationWhenAvailableCommand.handle(new
+    // ActivateReservationWhenAvailableCommand(bookId));
+    // }
+    //
+    // /**
+    // * Belirli bir kitap için kuyruk pozisyonlarını günceller
+    // */
+    // @PostMapping("/books/{bookId}/update-queue")
+    // public List<ReservationResponse> updateQueuePositions(@PathVariable UUID
+    // bookId) {
+    // return updateQueuePositionsCommand.handle(new
+    // UpdateQueuePositionsCommand(bookId));
+    // }
 
 }

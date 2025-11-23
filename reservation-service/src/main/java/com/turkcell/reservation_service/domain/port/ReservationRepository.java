@@ -8,15 +8,24 @@ import java.util.Optional;
 public interface ReservationRepository {
 
     Reservation save(Reservation reservation);
+
     Optional<Reservation> findById(ReservationId reservationId);
+
     List<Reservation> findAll();
+
     void deleteById(ReservationId reservationId);
+
     void delete(Reservation reservation);
+
     boolean existsByMemberIdAndBookIdAndStatus(MemberId memberId, BookId bookId, ReservationStatus reservationStatus);
 
     List<Reservation> findExpiredReservations();
+
     List<Reservation> findByBookIdAndStatus(BookId bookId, ReservationStatus status);
+
     List<Reservation> findByMemberId(MemberId memberId);
+
     long countByMemberIdAndStatus(MemberId memberId, ReservationStatus status);
-    List<Reservation> findByBookIdOrderByPriorityDescReservationDateAsc(BookId bookId);
+
+    List<Reservation> findByBookIdOrderByReservationDateAsc(BookId bookId);
 }

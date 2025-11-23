@@ -1,5 +1,6 @@
 package com.turkcell.reservation_service.infrastructure.messaging.producer.adapter;
 
+import com.turkcell.reservation_service.domain.event.ReservationActivatedEvent;
 import com.turkcell.reservation_service.domain.event.ReservationCancelledEvent;
 import com.turkcell.reservation_service.domain.event.ReservationCreatedEvent;
 import com.turkcell.reservation_service.domain.event.ReservationExpiredEvent;
@@ -53,6 +54,13 @@ public class DomainEventsPublisherAdapter implements DomainEventsPublisher {
         //outboxMessage.setPayloadJson();
         outboxRepository.save(outboxMessage);
 
+    }
+
+    @Override
+    public void publish(ReservationActivatedEvent reservationActivatedEvent) {
+        // TODO: ReservationActivatedIntegrationEvent oluşturulduğunda implement
+        // edilecek
+        // Şimdilik sadece log atıyoruz
     }
 
     @Override

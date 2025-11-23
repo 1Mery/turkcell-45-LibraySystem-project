@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 @Component
-public class GetReservationsByBookQueryHandler 
+public class GetReservationsByBookQueryHandler
         implements QueryHandler<GetReservationsByBookQuery, List<ReservationResponse>> {
 
     private final ReservationRepository reservationRepository;
@@ -41,13 +41,13 @@ public class GetReservationsByBookQueryHandler
             } catch (IllegalArgumentException e) {
                 // Invalid status, return all reservations for the book
                 reservations = reservationRepository
-                        .findByBookIdOrderByPriorityDescReservationDateAsc(bookId)
+                        .findByBookIdOrderByReservationDateAsc(bookId)
                         .stream();
             }
         } else {
-            // Priority ve reservation date'e göre sıralı (queue management için)
+            // Reservation date'e göre sıralı (queue management için)
             reservations = reservationRepository
-                    .findByBookIdOrderByPriorityDescReservationDateAsc(bookId)
+                    .findByBookIdOrderByReservationDateAsc(bookId)
                     .stream();
         }
         
@@ -56,5 +56,3 @@ public class GetReservationsByBookQueryHandler
                 .toList();
     }
 }
-
-

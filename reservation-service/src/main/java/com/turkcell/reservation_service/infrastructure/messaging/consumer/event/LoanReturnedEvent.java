@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 public record LoanReturnedEvent(
-        UUID loanId,
-        LocalDate returnDate
-) {
+                UUID loanId,
+                UUID bookId,
+                LocalDate returnDate) {
 }
