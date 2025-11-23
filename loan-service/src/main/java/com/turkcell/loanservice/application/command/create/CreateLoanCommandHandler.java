@@ -8,11 +8,10 @@ import com.turkcell.loanservice.application.event.LoanEventMapper;
 import com.turkcell.loanservice.application.event.LoanEventPublisher;
 import com.turkcell.loanservice.application.exception.BookItemNotAvailableException;
 import com.turkcell.loanservice.application.mapper.LoanMapper;
-import com.turkcell.loanservice.domain.model.BookItemId;
-import com.turkcell.loanservice.domain.model.Loan;
-import com.turkcell.loanservice.domain.model.LoanPeriod;
-import com.turkcell.loanservice.domain.model.UserId;
+import com.turkcell.loanservice.domain.model.*;
 import com.turkcell.loanservice.domain.repository.LoanRepository;
+import com.turkcell.loanservice.infrastructure.idompotency.IdempotentRequestEntity;
+import com.turkcell.loanservice.infrastructure.idompotency.IdempotentRequestRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -27,25 +26,34 @@ public class CreateLoanCommandHandler {
     private final UserClient userClient;
     private final LoanEventMapper eventMapper;
     private final LoanEventPublisher eventPublisher;
+    private final IdempotentRequestRepository idempotentRequestRepository;
 
-    public CreateLoanCommandHandler(LoanRepository loanRepository,
-                                    LoanMapper mapper,
-                                    BookClient bookClient,
-                                    UserClient userClient,
-                                    LoanEventMapper eventMapper,
-                                    LoanEventPublisher eventPublisher) {
+    public CreateLoanCommandHandler(LoanRepository loanRepository, LoanMapper mapper, BookClient bookClient, UserClient userClient, LoanEventMapper eventMapper, LoanEventPublisher eventPublisher, IdempotentRequestRepository idempotentRequestRepository) {
         this.loanRepository = loanRepository;
         this.mapper = mapper;
         this.bookClient = bookClient;
         this.userClient = userClient;
         this.eventMapper = eventMapper;
         this.eventPublisher = eventPublisher;
+        this.idempotentRequestRepository = idempotentRequestRepository;
     }
 
     public CreateLoanResponse createLoan(CreateLoanCommand command) {
 
         UUID userId = command.userId();
         UUID bookItemId = command.bookItemId();
+
+        // Idempotency Bu request daha önce işlenmiş mi
+        if (command.requestId() != null) {
+            var existing = idempotentRequestRepository.findById(command.requestId());
+            if (existing.isPresent()) {
+                // Daha önce aynı request ile bir loan oluşturulmuş
+                UUID existingLoanId = existing.get().getResourceId();
+                Loan existingLoan = loanRepository.findById(new LoanId(existingLoanId))
+                        .orElseThrow(); // burada istersen LoanNotFoundException kullan
+                return mapper.toCreateResponse(existingLoan);
+            }
+        }
 
         // Kitap uygun mu
         Boolean available = bookClient.isBookItemAvailable(bookItemId);
@@ -80,6 +88,16 @@ public class CreateLoanCommandHandler {
                 bookTitle
         );
         eventPublisher.publish(event);
+
+        // IdempotentRequest kaydet artık bu requestId işlendi
+        if (command.requestId() != null) {
+            IdempotentRequestEntity entity = new IdempotentRequestEntity();
+            entity.setRequestId(command.requestId());
+            entity.setOperation("CREATE_LOAN");
+            entity.setResourceId(loan.getId().value());
+            entity.setCreatedAt(Instant.now());
+            idempotentRequestRepository.save(entity);
+        }
 
         //Response dön
         return mapper.toCreateResponse(loan);

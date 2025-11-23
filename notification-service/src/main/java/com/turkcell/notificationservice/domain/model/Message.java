@@ -1,11 +1,13 @@
 package com.turkcell.notificationservice.domain.model;
 
+import com.turkcell.notificationservice.domain.exception.InvalidMessageException;
+
 public record Message(String body) {
 
     public Message {
 
         if (body == null || body.isBlank()) {
-            throw new IllegalArgumentException("Message body cannot be empty.");
+            throw new InvalidMessageException("Message body cannot be empty.");
         }
     }
 }

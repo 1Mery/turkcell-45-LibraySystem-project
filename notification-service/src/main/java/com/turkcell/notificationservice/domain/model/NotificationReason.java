@@ -10,7 +10,8 @@ public enum NotificationReason {
     FINE_ISSUED,
     FINE_PAID,
 
-    USER_REGISTERED
+    USER_REGISTERED,
+    USER_DELETED
 
     //TODO:event isimleriyle uyumlu olmalı düzenlenecek
 }

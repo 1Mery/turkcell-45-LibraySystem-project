@@ -4,6 +4,7 @@ import com.turkcell.bookservice.application.command.InventoryCalculator;
 import com.turkcell.bookservice.application.dto.BookItemDto;
 import com.turkcell.bookservice.application.dto.BookResponseDto;
 import com.turkcell.bookservice.application.dto.InventoryDto;
+import com.turkcell.bookservice.application.exception.BookNotFoundException;
 import com.turkcell.bookservice.application.mapper.BookItemMapper;
 import com.turkcell.bookservice.application.mapper.BookResponseMapper;
 import com.turkcell.bookservice.domain.model.Book;
@@ -35,7 +36,7 @@ public class UpdateBookCommandHandler {
     public BookResponseDto update(UpdateBookCommand command) {
         BookId id = new BookId(UUID.fromString(command.id()));
         Book book = bookRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Book not found"));
+                .orElseThrow(() -> new BookNotFoundException(id.value()));
 
         if (command.title() != null && !command.title().isBlank())
             book.renameTitle(command.title());

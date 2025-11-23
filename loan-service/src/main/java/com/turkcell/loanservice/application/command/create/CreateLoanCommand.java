@@ -7,6 +7,7 @@ public record CreateLoanCommand(
         UUID userId,
         UUID bookItemId,
         LocalDate loanDate,
-        LocalDate dueDate
+        LocalDate dueDate,
+        UUID requestId // idempotency key
 ) {
 }

@@ -1,5 +1,6 @@
 package com.turkcell.bookservice.application.command.bookItemCommands;
 
+import com.turkcell.bookservice.application.exception.BookNotFoundException;
 import com.turkcell.bookservice.domain.model.Book;
 import com.turkcell.bookservice.domain.model.BookId;
 import com.turkcell.bookservice.domain.model.BookItem;
@@ -17,7 +18,7 @@ public class AddBookCopyHandler {
 
     public void addCopy(AddBookCopyCommand cmd) {
         Book book = bookRepository.findById(new BookId(cmd.bookId()))
-                .orElseThrow(() -> new IllegalArgumentException("Book not found"));
+                .orElseThrow(() -> new BookNotFoundException(cmd.bookId()));
         BookItem newCopy=BookItem.create(book.getId());
 
         book.addCopy(newCopy);

@@ -8,6 +8,7 @@ public record LoanEvent(
         String dueDate,
         int daysOverdue,
         String reason,
-        String loanId
+        String loanId,
+        String userId
 ) {
 }

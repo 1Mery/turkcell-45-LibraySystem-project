@@ -1,7 +1,9 @@
 package com.turkcell.notificationservice.infrastructure.persistence.email;
 
+import com.turkcell.notificationservice.application.excepiton.NotificationSendFailedException;
 import com.turkcell.notificationservice.application.port.NotificationSender;
 import com.turkcell.notificationservice.domain.model.Notification;
+import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Component;
@@ -23,6 +25,12 @@ public class EmailNotificationSenderAdapter implements NotificationSender {
         message.setSubject("Kütüphane Bildirimi");
         message.setText(notification.getMessage().body());
 
-        mailSender.send(message);
+        try {
+            mailSender.send(notification);
+            notification.markSent();
+        } catch (NotificationSendFailedException e) {
+            notification.markFailed();
+        }
     }
 }
+

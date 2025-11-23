@@ -1,5 +1,7 @@
 package com.turkcell.loanservice.domain.model;
 
+import com.turkcell.loanservice.domain.exception.InvalidLoanPeriodException;
+
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.Objects;
@@ -11,9 +13,9 @@ public final class LoanPeriod {
 
     public LoanPeriod(LocalDate loanDate, LocalDate dueDate) {
         if (loanDate == null || dueDate == null)
-            throw new IllegalArgumentException("Loan date and due date cannot be null");
+            throw new InvalidLoanPeriodException("Loan date and due date cannot be null");
         if (loanDate.isAfter(dueDate))
-            throw new IllegalArgumentException("Loan date cannot be after due date");
+            throw new InvalidLoanPeriodException("Loan date cannot be after due date");
         this.loanDate = loanDate;
         this.dueDate = dueDate;
     }
