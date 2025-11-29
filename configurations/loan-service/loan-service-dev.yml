@@ -11,6 +11,17 @@ spring:
           brokers: localhost:9094
           auto-create-topics: true
 
+  datasource:
+    url: jdbc:postgresql://localhost:5435/loandb
+    username: postgres
+    password: loan
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
 
 eureka:
   client:

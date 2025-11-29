@@ -12,6 +12,46 @@ services:
     networks:
       - postgres
 
+  book_db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: bookdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: book
+    ports:
+      - "5436:5432"
+    volumes:
+      - bookdb_volume:/var/lib/postgresql/data
+    networks:
+      - postgres
+
+  loan_db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: loandb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: loan
+    ports:
+      - "5435:5432"
+    volumes:
+      - loandb_volume:/var/lib/postgresql/data
+    networks:
+      - postgres
+
+  notification_db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: notificationdb
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: notification
+    ports:
+      - "5437:5432"
+    volumes:
+      - notifdb_volume:/var/lib/postgresql/data
+    networks:
+      - postgres
+
+
   kafka:
     image: apache/kafka:3.8.0
     container_name: kafka
@@ -74,6 +114,9 @@ services:
 volumes:
   reservation_db_vol: {}
   kafka-data: {}
+  bookdb_volume:
+  loandb_volume:
+  notifdb_volume:
 
 networks:
   postgres:

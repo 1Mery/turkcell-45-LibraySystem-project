@@ -23,7 +23,9 @@ public class LoanEventMapper {
                 loan.getPeriod().getDueDate().toString(),
                 0, // daha gecikme yok
                 "LOAN_CREATED",
-                loan.getId().value().toString()
+                loan.getId().toString(),
+                loan.getUserId().toString()
+
         );
     }
 
@@ -50,7 +52,8 @@ public class LoanEventMapper {
                 loan.getPeriod().getDueDate().toString(),
                 (int) overdueDays,
                 "LOAN_OVERDUE",
-                loan.getId().value().toString()
+                loan.getId().value().toString(),
+                loan.getUserId().toString()
         );
     }
 
@@ -77,7 +80,8 @@ public class LoanEventMapper {
                 loan.getPeriod().getDueDate().toString(),
                 (int) overdueDays,
                 "LOAN_RETURNED_LATE",
-                loan.getId().value().toString()
+                loan.getId().value().toString(),
+                loan.getUserId().toString()
         );
     }
 }

@@ -10,15 +10,15 @@ import java.util.UUID;
 @FeignClient(name = "book-service")
 public interface BookClient {
 
-    @GetMapping("/api/v1/books/{id}/title")
-    String getBookTitle(@PathVariable UUID id);
+    @GetMapping("/api/v1/books/items/{itemId}/title")
+    String getBookTitle(@PathVariable UUID itemId);
 
-    @GetMapping("/api/v1/book-items/{id}/available")
-    Boolean isBookItemAvailable(@PathVariable UUID id);
+    @GetMapping("/api/v1/books/items/{id}/available")
+    boolean isBookItemAvailable(@PathVariable UUID id);
 
-    @PostMapping("/api/v1/book-items/{id}/loan")
-    void markBorrowed(@PathVariable UUID id);
+    @PostMapping("/api/v1/books/items/{itemId}/loan")
+    void markLoaned(@PathVariable UUID itemId);
 
-    @PostMapping("/api/v1/book-items/{id}/return")
+    @PostMapping("/api/v1/books/items/{id}/return")
     void markReturned(@PathVariable UUID id);
 }
