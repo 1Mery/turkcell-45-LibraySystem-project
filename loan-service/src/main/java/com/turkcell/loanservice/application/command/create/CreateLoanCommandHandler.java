@@ -6,6 +6,7 @@ import com.turkcell.loanservice.application.dto.CreateLoanResponse;
 import com.turkcell.loanservice.application.event.LoanEvent;
 import com.turkcell.loanservice.application.event.LoanEventMapper;
 import com.turkcell.loanservice.application.event.LoanEventPublisher;
+import com.turkcell.loanservice.application.event.LoanOutboxService;
 import com.turkcell.loanservice.application.exception.BookItemNotAvailableException;
 import com.turkcell.loanservice.application.mapper.LoanMapper;
 import com.turkcell.loanservice.domain.model.*;
@@ -27,8 +28,10 @@ public class CreateLoanCommandHandler {
     private final LoanEventMapper eventMapper;
     private final LoanEventPublisher eventPublisher;
     private final IdempotentRequestRepository idempotentRequestRepository;
+    private final LoanOutboxService outboxService;
 
-    public CreateLoanCommandHandler(LoanRepository loanRepository, LoanMapper mapper, BookClient bookClient, UserClient userClient, LoanEventMapper eventMapper, LoanEventPublisher eventPublisher, IdempotentRequestRepository idempotentRequestRepository) {
+
+    public CreateLoanCommandHandler(LoanRepository loanRepository, LoanMapper mapper, BookClient bookClient, UserClient userClient, LoanEventMapper eventMapper, LoanEventPublisher eventPublisher, IdempotentRequestRepository idempotentRequestRepository, LoanOutboxService outboxService) {
         this.loanRepository = loanRepository;
         this.mapper = mapper;
         this.bookClient = bookClient;
@@ -36,6 +39,7 @@ public class CreateLoanCommandHandler {
         this.eventMapper = eventMapper;
         this.eventPublisher = eventPublisher;
         this.idempotentRequestRepository = idempotentRequestRepository;
+        this.outboxService = outboxService;
     }
 
     public CreateLoanResponse createLoan(CreateLoanCommand command) {
@@ -73,7 +77,7 @@ public class CreateLoanCommandHandler {
         loanRepository.save(loan);
 
         //Book-service bu item artık BORROWED
-        bookClient.markBorrowed(bookItemId);
+        bookClient.markLoaned(bookItemId);
 
         // Bildirim için Feign ile user + book bilgilerini çek
         String email = userClient.getEmail(userId);
@@ -87,7 +91,7 @@ public class CreateLoanCommandHandler {
                 name,
                 bookTitle
         );
-        eventPublisher.publish(event);
+        outboxService.saveEvent("LOAN_CREATED", event);
 
         // IdempotentRequest kaydet artık bu requestId işlendi
         if (command.requestId() != null) {

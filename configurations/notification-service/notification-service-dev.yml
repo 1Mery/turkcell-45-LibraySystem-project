@@ -27,6 +27,19 @@
           brokers: localhost:9094
           autoCreateTopics: true
 
+  spring:
+    datasource:
+      url: jdbc:postgresql://localhost:5437/notificationdb
+      username: postgres
+      password: notification
+      driver-class-name: org.postgresql.Driver
+
+    jpa:
+      database-platform: org.hibernate.dialect.PostgreSQLDialect
+      hibernate:
+        ddl-auto: update
+      show-sql: true
+
   eureka:
     client:
       service-url:

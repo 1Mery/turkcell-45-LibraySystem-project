@@ -19,7 +19,7 @@ public class SendLoanReturnedLateNotificationHandler {
 
     public void loanReturn(SendLoanReturnedLateNotificationCommand command) {
 
-        Recipient recipient = new Recipient(command.email());
+        Recipient recipient = new Recipient(command.userEmail());
 
         String body = String.format(
                 "Ödünç aldığınız '%s' kitabını geç iade ettiniz. " +

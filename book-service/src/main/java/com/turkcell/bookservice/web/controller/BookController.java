@@ -155,13 +155,13 @@ public class BookController {
     }
 
     // bookItem  LOANED
-    @PatchMapping("/items/{itemId}/loan")
+    @PostMapping("/items/{itemId}/loan")
     public void markAsLoaned(@PathVariable UUID itemId) {
         updateBookItemStatusHandler.markAsLoaned(itemId);
     }
 
     // bookItem  AVAILABLE
-    @PatchMapping("/items/{itemId}/return")
+    @PostMapping("/items/{itemId}/return")
     public void markAsReturned(@PathVariable UUID itemId) {
         updateBookItemStatusHandler.markAsReturned(itemId);
     }
