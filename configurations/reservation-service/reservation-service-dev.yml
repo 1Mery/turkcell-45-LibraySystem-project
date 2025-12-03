@@ -5,9 +5,9 @@ eureka:
 
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5433/reservation-service
+    url: jdbc:postgresql://localhost:5432/reservation-service_db
     username: postgres
-    password: reservation_db_pass
+    password: reservation_db_password
 
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQLDialect
@@ -27,3 +27,13 @@ spring:
         reservationCreated-out-0:     #dışarıya bir mesaj gönderir
           destination: reservation-topic
           contentType: application/json  #mesaj içeriğini serialize ederken json kullan
+
+        loanReturnedEvent-in-0:
+          destination: loan-topic
+          group: reservation-service
+          contentType: application/json
+
+        bookCopyAddedEvent-in-0:
+          destination: book-topic
+          group: reservation-service
+          contentType: application/json
